@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "data_class": "SYNTHETIC",
+  "fund_count": 30,
+  "nav_dates": 1230,
+  "price_observations": 36900,
+  "start": "2022-01-03",
+  "end": "2026-09-18",
+  "checks_passed": 10,
+  "portfolios": [
+    {
+      "name": "Temkinli",
+      "total_return": 1.2925784462715044,
+      "annual_return": 0.1854482154181285,
+      "volatility": 0.06135925410037458,
+      "max_drawdown": -0.0573545140392574,
+      "observations": 1229,
+      "var95": 0.0054756917817732065,
+      "es95": 0.0067794033498322455,
+      "tested_days": 977,
+      "exceptions": 54,
+      "exception_rate": 0.05527123848515865,
+      "reference_rate": 0.05
+    },
+    {
+      "name": "Dengeli",
+      "total_return": 0.8794278474367485,
+      "annual_return": 0.1381186051519656,
+      "volatility": 0.12711524485462675,
+      "max_drawdown": -0.17983110348339493,
+      "observations": 1229,
+      "var95": 0.012190193182593179,
+      "es95": 0.014899527793885243,
+      "tested_days": 977,
+      "exceptions": 46,
+      "exception_rate": 0.04708290685772774,
+      "reference_rate": 0.05
+    },
+    {
+      "name": "Büyüme",
+      "total_return": 0.5799117727726486,
+      "annual_return": 0.0983193131250728,
+      "volatility": 0.18900702703756528,
+      "max_drawdown": -0.34814959918421384,
+      "observations": 1229,
+      "var95": 0.018391742622835938,
+      "es95": 0.02326436982868095,
+      "tested_days": 977,
+      "exceptions": 47,
+      "exception_rate": 0.048106448311156604,
+      "reference_rate": 0.05
+    }
+  ],
+  "inputs": {
+    "benchmarks.csv": "91a3f810681fb2ae64af4389b063652ff97b54a99db93803c43c29b714259e46",
+    "fund_prices.csv": "63070e05a6ee731fde880ef7350307f37063fff035c5d07efa0db53147518d66",
+    "funds.csv": "e302718a0a2e0a00b27b3531da092b59dd8b06f94c8f433a9af998002cd36c94"
+  }
+}

@@ -1,0 +1,11 @@
+control,status
+Required schema,PASS
+Unique entity-date keys,PASS
+Positive finite NAV,PASS
+TRY unit,PASS
+Fund referential integrity,PASS
+Benchmark coverage,PASS
+Complete common date grid,PASS
+Data classification,PASS
+Source cutoff,PASS
+Minimum observation history,PASS

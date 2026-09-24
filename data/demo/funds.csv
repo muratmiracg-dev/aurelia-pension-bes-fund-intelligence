@@ -1,0 +1,31 @@
+fund_id,name,category,annual_fee_assumption,currency,data_class,source_url,source_asof
+DEMO-HS01,Aurelia Hisse Senedi 01,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-HS02,Aurelia Hisse Senedi 02,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-HS03,Aurelia Hisse Senedi 03,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-HS04,Aurelia Hisse Senedi 04,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-HS05,Aurelia Hisse Senedi 05,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-HS06,Aurelia Hisse Senedi 06,Hisse Senedi,0.016,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA01,Aurelia Borçlanma Araçları 01,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA02,Aurelia Borçlanma Araçları 02,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA03,Aurelia Borçlanma Araçları 03,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA04,Aurelia Borçlanma Araçları 04,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA05,Aurelia Borçlanma Araçları 05,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-BA06,Aurelia Borçlanma Araçları 06,Borçlanma Araçları,0.01,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL01,Aurelia Altın 01,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL02,Aurelia Altın 02,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL03,Aurelia Altın 03,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL04,Aurelia Altın 04,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL05,Aurelia Altın 05,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-AL06,Aurelia Altın 06,Altın,0.011,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP01,Aurelia Para Piyasası 01,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP02,Aurelia Para Piyasası 02,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP03,Aurelia Para Piyasası 03,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP04,Aurelia Para Piyasası 04,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP05,Aurelia Para Piyasası 05,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-PP06,Aurelia Para Piyasası 06,Para Piyasası,0.005,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG01,Aurelia Değişken 01,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG02,Aurelia Değişken 02,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG03,Aurelia Değişken 03,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG04,Aurelia Değişken 04,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG05,Aurelia Değişken 05,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
+DEMO-DG06,Aurelia Değişken 06,Değişken,0.014,TRY,SYNTHETIC,,2026-09-18
