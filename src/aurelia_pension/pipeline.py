@@ -34,8 +34,6 @@ def build(root: Path, data_dir: Path | None = None) -> dict:
     out = root / "artifacts"
     out.mkdir(exist_ok=True)
     # Portfolio fixtures select the first fund ID alphabetically, never by performance.
-    if set(funds.category) != set(CATEGORIES):
-        raise ValueError("Version 1 model allocations require the five documented categories")
     selected = {c: funds.loc[funds.category.eq(c), "fund_id"].sort_values().iloc[0]
                 for c in CATEGORIES}
     portfolios = []

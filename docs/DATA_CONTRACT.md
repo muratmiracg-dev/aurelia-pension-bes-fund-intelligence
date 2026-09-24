@@ -36,3 +36,18 @@ validate distribution rights, split/distribution adjustments and comparability.
 
 Run a rebuild from the root after modifying input contracts. A default build regenerates
 the synthetic files; `--data-dir` never rewrites supplied CSV inputs.
+
+## Preflight validation
+
+Run `python -m aurelia_pension validate --data-dir PATH --json` before building.
+Validation reads the existing three CSVs, applies the same ingestion gates as the build,
+and writes no files. Success returns JSON with `status: PASS`, counts, date coverage and
+the ten controls. A data or filesystem error returns `status: FAIL`, an error message
+and process exit code 2. Source URLs are provenance declarations, not independently
+verified by these gates.
+
+Identifiers are parsed as text in both metadata and prices: leading zeros and literal
+`NA` are preserved. Empty observation dates and empty source cutoffs are rejected.
+All five supported categories must be present during preflight, before any artifact
+output is created. `serve --data-dir PATH` always validates and rebuilds the supplied
+data before opening the localhost server.

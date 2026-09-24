@@ -51,9 +51,14 @@ def generate(directory: Path) -> None:
 
 
 def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, list[dict]]:
-    funds = pd.read_csv(directory / "funds.csv", keep_default_na=False)
-    prices = pd.read_csv(directory / "fund_prices.csv")
-    benchmarks = pd.read_csv(directory / "benchmarks.csv", keep_default_na=False)
+    # Identifiers are labels: preserve leading zeros and literal strings such as NA.
+    text_columns = {key: str for key in ["fund_id", "name", "category", "currency",
+                                        "data_class", "source_url", "source_asof"]}
+    funds = pd.read_csv(directory / "funds.csv", keep_default_na=False, dtype=text_columns)
+    prices = pd.read_csv(directory / "fund_prices.csv", keep_default_na=False,
+                         dtype={"fund_id": str})
+    benchmarks = pd.read_csv(directory / "benchmarks.csv", keep_default_na=False,
+                             dtype=text_columns)
     contracts = [(funds, {"fund_id", "name", "category", "currency", "data_class",
                           "source_url", "source_asof"}),
                  (prices, {"date", "fund_id", "nav"}),
@@ -67,6 +72,8 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
         raise ValueError("Fund IDs must be unique and non-empty")
     if not funds.currency.eq("TRY").all():
         raise ValueError("Version 1 requires TRY-valued total-return NAV")
+    if set(funds.category) != set(CATEGORIES):
+        raise ValueError("Version 1 model allocations require the five documented categories")
     classes = set(funds.data_class)
     if len(classes) != 1 or not classes <= {"SYNTHETIC", "EXTERNAL"}:
         raise ValueError("Use one declared data class; do not silently mix sources")
@@ -76,11 +83,15 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
         for table in [funds, benchmarks]:
             if not table.source_url.str.startswith("https://").all():
                 raise ValueError("External funds and benchmarks need provenance HTTPS URLs")
-    pd.to_datetime(funds.source_asof, format="%Y-%m-%d", errors="raise")
+    for table in [funds, benchmarks]:
+        if pd.to_datetime(table.source_asof, format="%Y-%m-%d", errors="raise").isna().any():
+            raise ValueError("Source cutoff dates must be non-empty")
     if (funds["name"].str.strip().eq("") | funds.category.str.strip().eq("")).any():
         raise ValueError("Names and categories must be non-empty")
     for table, key in [(prices, "fund_id"), (benchmarks, "category")]:
         table["date"] = pd.to_datetime(table.date, format="%Y-%m-%d", errors="raise")
+        if table.date.isna().any():
+            raise ValueError("Observation dates must be non-empty")
         if table.duplicated(["date", key]).any():
             raise ValueError("Duplicate date / entity observation")
         table["nav"] = pd.to_numeric(table.nav, errors="raise")

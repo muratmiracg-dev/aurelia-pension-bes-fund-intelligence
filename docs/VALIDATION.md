@@ -1,11 +1,11 @@
 # Validation record
 
-Local execution: **20 September 2026**.
+Local regression update: **24 September 2026**.
 
 | Check | Observed result |
 |---|---|
 | Python environment | Python 3.12, NumPy 2.3.5, pandas 2.2.3 |
-| `python -m unittest discover -s tests -v` | **25 tests passed** |
+| `python -m unittest discover -s tests -v` | **32 tests passed** |
 | `node tests/test_engine.cjs` | **543 numerical comparisons passed**, plus boundary assertions |
 | Demo generation | **30 funds; 1,230 NAV dates; 36,900 fund-price observations** |
 | Input quality gates | **10 passed** |
@@ -37,5 +37,24 @@ checks should be completed in a normal desktop browser before public promotion:
 - Export a comparison CSV; compare selected category and period with the screen.
 - Check keyboard navigation and narrow-screen overflow.
 
-CI and CodeQL workflow files are supplied; remote successful runs are not claimed
-until the repository has been uploaded to GitHub and Actions has executed them.
+## GitHub execution evidence
+
+The initial publication passed [analytics CI on Python 3.11 and 3.12](https://github.com/muratmiracg-dev/aurelia-pension-bes-fund-intelligence/actions/runs/36000463013).
+The initial [Python and JavaScript CodeQL run](https://github.com/muratmiracg-dev/aurelia-pension-bes-fund-intelligence/actions/runs/36000463006) also completed successfully.
+For the status of subsequent commits, use the live workflow badges in the README.
+Local regression counts above describe the updated suite; they do not retroactively
+change the test count in an earlier GitHub run.
+
+## Added regression cases
+
+- CLI validation returns a JSON summary without changing any input bytes or creating artifacts.
+- Missing inputs produce a machine-readable failure and exit code 2.
+- Invalid explicit input prevents serving an existing stale report.
+- Fund identifiers preserve leading zeros and the literal label `NA`.
+- Unsupported category mappings fail during ingestion, before report generation.
+- Blank observation dates and source cutoff dates fail validation.
+
+A clean build with the updated ingestion code reproduced the bundled dashboard, JSON
+and metric CSVs byte-for-byte. The SQL examples returned 5 category leaders, 3 portfolio
+summaries and 30 fund observation counts against the bundled warehouse. The header illustration
+is a project identity graphic, not a screenshot or a depiction of investment returns.

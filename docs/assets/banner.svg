@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 330" role="img" aria-labelledby="title desc">
+<title id="title">Aurelia Pension — BES Fund Intelligence</title>
+<desc id="desc">Pension research, portfolio risk and contribution scenarios. Python, SQL and JavaScript. Synthetic data demonstration.</desc>
+<rect width="1200" height="330" rx="20" fill="#0f2331"/>
+<rect x="48" y="46" width="5" height="172" rx="2" fill="#62dfb0"/>
+<text x="78" y="70" fill="#62dfb0" font-family="Arial,sans-serif" font-size="15" letter-spacing="4">PENSION ANALYTICS / RESEARCH PORTFOLIO</text>
+<text x="74" y="133" fill="#fffaf0" font-family="Georgia,serif" font-size="56">Aurelia Pension</text>
+<text x="78" y="177" fill="#e0e9ec" font-family="Arial,sans-serif" font-size="27">BES Fund Intelligence</text>
+<text x="78" y="212" fill="#b3c5ce" font-family="Arial,sans-serif" font-size="18">Fund comparison · Portfolio risk · Savings scenarios</text>
+<path d="M845 218 V170 H890 V137 H935 V100 H980 V66 H1025" fill="none" stroke="#62dfb0" stroke-width="8" stroke-linejoin="round"/>
+<circle cx="1025" cy="66" r="9" fill="#62dfb0"/>
+<text x="841" y="253" fill="#b3c5ce" font-family="Arial,sans-serif" font-size="14">SYNTHETIC DATA DEMO</text>
+<path d="M48 273 H1152" stroke="#314957"/>
+<text x="78" y="308" fill="#c8d5dc" font-family="Arial,sans-serif" font-size="16">Murat Miraç Gedik</text>
+<text x="720" y="308" fill="#c8d5dc" font-family="Arial,sans-serif" font-size="16">Python · pandas · NumPy · SQL · JavaScript</text>
+</svg>

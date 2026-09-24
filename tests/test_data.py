@@ -66,6 +66,44 @@ class DataTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Orphan"):
             load(self.directory)
 
+    def test_text_identifiers_preserved(self):
+        funds = pd.read_csv(self.directory / "funds.csv", keep_default_na=False)
+        mapping = {value: f"{i:04d}" for i, value in enumerate(funds.fund_id)}
+        mapping[funds.fund_id.iloc[-1]] = "NA"
+        for name in ["funds.csv", "fund_prices.csv"]:
+            file = self.directory / name
+            table = pd.read_csv(file, keep_default_na=False)
+            table["fund_id"] = table.fund_id.map(mapping)
+            table.to_csv(file, index=False)
+        loaded, prices, _, _ = load(self.directory)
+        self.assertEqual(set(loaded.fund_id), set(mapping.values()))
+        self.assertEqual(set(prices.columns), set(mapping.values()))
+
+    def test_unsupported_categories_rejected_at_ingestion(self):
+        for name in ["funds.csv", "benchmarks.csv"]:
+            file = self.directory / name
+            table = pd.read_csv(file, keep_default_na=False)
+            table.loc[table.category.eq("Altın"), "category"] = "Unknown"
+            table.to_csv(file, index=False)
+        with self.assertRaisesRegex(ValueError, "five documented categories"):
+            load(self.directory)
+
+    def test_blank_observation_date_rejected(self):
+        file = self.directory / "fund_prices.csv"
+        table = pd.read_csv(file)
+        table.loc[0, "date"] = ""
+        table.to_csv(file, index=False)
+        with self.assertRaisesRegex(ValueError, "dates must be non-empty"):
+            load(self.directory)
+
+    def test_blank_source_cutoff_rejected(self):
+        file = self.directory / "funds.csv"
+        table = pd.read_csv(file, keep_default_na=False)
+        table.loc[0, "source_asof"] = ""
+        table.to_csv(file, index=False)
+        with self.assertRaisesRegex(ValueError, "cutoff dates must be non-empty"):
+            load(self.directory)
+
 
 if __name__ == "__main__":
     unittest.main()
