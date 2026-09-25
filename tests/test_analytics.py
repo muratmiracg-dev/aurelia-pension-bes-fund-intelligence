@@ -45,6 +45,13 @@ class AnalyticsTests(unittest.TestCase):
     def test_flat_benchmark_ratio_undefined(self):
         self.assertIsNone(metrics([1, 1, 1], [1, 1, 1])["information_ratio"])
 
+    def test_benchmark_dates_must_align(self):
+        dates = pd.bdate_range("2025-01-02", periods=3)
+        nav = pd.Series([100, 101, 102], index=dates)
+        benchmark = pd.Series([100, 100.5, 101], index=dates.shift(1, freq="B"))
+        with self.assertRaisesRegex(ValueError, "share the same dates"):
+            metrics(nav, benchmark)
+
     def test_contributions_zero_growth(self):
         final = contribution_projection(5000, 2, 0, 0)[-1]
         self.assertEqual(final["balance"], 120000)
