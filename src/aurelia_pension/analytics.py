@@ -51,6 +51,9 @@ def historical_tail(daily_returns: Sequence[float], confidence: float = 0.95) ->
 
 
 def metrics(nav: Sequence[float], benchmark: Sequence[float] | None = None) -> dict:
+    if (isinstance(nav, pd.Series) and isinstance(benchmark, pd.Series)
+            and not nav.index.equals(benchmark.index)):
+        raise ValueError("Benchmark and NAV must share the same dates")
     values = finite_vector(nav, minimum=3)
     daily = returns(values)
     volatility = float(np.std(daily, ddof=1) * np.sqrt(PERIODS))

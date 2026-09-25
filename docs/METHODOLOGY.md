@@ -12,7 +12,10 @@ NAV simple return is `P[t] / P[t-1] - 1`. Period return is `P[end]/P[start]-1`.
 Annualization uses 252 observations: `growth ** (252 / number_of_returns) - 1`.
 This convention is explicit; the generated calendar is weekdays, not the official
 Turkish market calendar. All funds and benchmarks must share a complete date grid.
-No prices are forward-filled. 1Y and 3Y mean 252 and 756 return observations.
+For indexed pandas series, benchmark-relative metrics require exact date-index
+equality; equal-length series with different dates are rejected rather than compared
+by position. No prices are forward-filled. 1Y and 3Y mean 252 and 756 return
+observations.
 
 NAV is assumed net of fund expenses. The synthetic generator deducts an illustrative
 expense drag once. Period NAV returns therefore cannot be substituted for the gross
