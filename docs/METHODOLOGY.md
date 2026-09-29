@@ -20,7 +20,9 @@ observations.
 NAV is assumed net of fund expenses. The synthetic generator deducts an illustrative
 expense drag once. Period NAV returns therefore cannot be substituted for the gross
 returns in official EGM performance evaluation. Ranks are descriptive, category-only
-and use minimum rank for ties. Category median includes the selected fund.
+and use minimum rank for ties. Category median includes the selected fund. Peer-ranking
+inputs require unique, non-empty fund IDs and categories plus finite numeric period
+returns; invalid observations are rejected before ranking.
 
 Category benchmarks are independent synthetic factor series, not the average of fund
 prices and not official EGM indices. Excess return is the difference between period
