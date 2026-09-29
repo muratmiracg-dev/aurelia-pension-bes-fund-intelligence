@@ -42,6 +42,22 @@ class AnalyticsTests(unittest.TestCase):
                                       "total_return": [.8, .6, .1, .2]}))
         self.assertEqual(f.peer_rank.tolist(), [1, 2, 2, 1])
 
+    def test_peer_ranking_rejects_invalid_returns(self):
+        for invalid in [float("nan"), float("inf"), "not-a-number"]:
+            frame = pd.DataFrame({"fund_id": ["A", "B"],
+                                  "category": ["X", "X"],
+                                  "total_return": [.1, invalid]})
+            with self.subTest(invalid=invalid), self.assertRaisesRegex(
+                    ValueError, "finite numeric"):
+                peer_ranking(frame)
+
+    def test_peer_ranking_rejects_blank_categories(self):
+        frame = pd.DataFrame({"fund_id": ["A", "B"],
+                              "category": ["X", " "],
+                              "total_return": [.1, .2]})
+        with self.assertRaisesRegex(ValueError, "non-empty"):
+            peer_ranking(frame)
+
     def test_flat_benchmark_ratio_undefined(self):
         self.assertIsNone(metrics([1, 1, 1], [1, 1, 1])["information_ratio"])
 
