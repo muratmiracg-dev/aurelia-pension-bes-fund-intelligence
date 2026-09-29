@@ -91,7 +91,19 @@ def peer_ranking(frame: pd.DataFrame) -> pd.DataFrame:
     required = {"fund_id", "category", "total_return"}
     if not required <= set(frame.columns) or frame.fund_id.duplicated().any():
         raise ValueError("Expected unique funds with category and period return")
+    if frame.empty or frame[["fund_id", "category"]].isna().any().any():
+        raise ValueError("Peer ranking inputs must be complete")
+    if (frame["fund_id"].astype(str).str.strip().eq("").any()
+            or frame["category"].astype(str).str.strip().eq("").any()):
+        raise ValueError("Fund IDs and categories must be non-empty")
+    try:
+        total_return = pd.to_numeric(frame["total_return"], errors="raise")
+    except (TypeError, ValueError) as error:
+        raise ValueError("Period returns must be finite numeric values") from error
+    if not np.isfinite(total_return.to_numpy(dtype=float)).all():
+        raise ValueError("Period returns must be finite numeric values")
     out = frame.copy()
+    out["total_return"] = total_return
     out["peer_rank"] = out.groupby("category")["total_return"].rank(
         ascending=False, method="min"
     ).astype(int)
