@@ -37,7 +37,13 @@ def historical_tail(daily_returns: Sequence[float], confidence: float = 0.95) ->
     Reported loss measures are floored at zero for a wholly positive sample.
     """
     values = finite_vector(daily_returns)
-    if not 0 < confidence < 1 or (values <= -1).any():
+    if (
+        isinstance(confidence, bool)
+        or not isinstance(confidence, (int, float))
+        or not math.isfinite(confidence)
+        or not 0 < confidence < 1
+        or (values <= -1).any()
+    ):
         raise ValueError("Invalid confidence or return domain")
     losses = np.sort(-values)[::-1]
     mass = (1 - confidence) * len(losses)
@@ -157,6 +163,8 @@ def contribution_projection(monthly: float, years: int, annual_return: float,
     withholding tax and contract-specific deductions are outside this model.
     """
     vals = [monthly, annual_return, inflation, escalation]
+    if any(isinstance(value, bool) or not isinstance(value, (int, float)) for value in vals):
+        raise ValueError("Assumptions must be numeric and must not be booleans")
     if not all(math.isfinite(x) for x in vals):
         raise ValueError("Assumptions must be finite")
     if isinstance(years, bool) or not isinstance(years, int) or not 1 <= years <= 40:

@@ -91,3 +91,9 @@ does not address survivorship bias or changing category membership. Synthetic
 correlations and stress regimes are design choices. Actual deployment needs point-in-time
 fund metadata, licensed observations, settlement rules, independently checked metrics
 and human review. External CSV support does not independently verify a supplier's truth.
+# Analytical parameter validation
+
+Historical-tail confidence must be a finite numeric value strictly between zero
+and one. Contribution, return, inflation and escalation assumptions must be
+finite numeric values; booleans and numeric-looking strings are rejected
+instead of being silently interpreted as money or rates.
