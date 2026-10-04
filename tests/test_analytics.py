@@ -24,6 +24,11 @@ class AnalyticsTests(unittest.TestCase):
         self.assertAlmostEqual(risk["var95"], .1)
         self.assertAlmostEqual(risk["es95"], .2)
 
+    def test_tail_rejects_invalid_confidence(self):
+        for confidence in (True, "0.95", float("nan"), float("inf"), 0, 1):
+            with self.subTest(confidence=confidence), self.assertRaises(ValueError):
+                historical_tail([-0.02, -0.01, 0.01], confidence)
+
     def test_fractional_tail(self):
         risk = historical_tail([-.20, -.10] + [0.] * 28)
         self.assertAlmostEqual(risk["es95"], (.2 + .5 * .1) / 1.5)
@@ -92,6 +97,15 @@ class AnalyticsTests(unittest.TestCase):
                      (100, True, .1, .1), (100, 2, float("nan"), .1)]:
             with self.subTest(args=args), self.assertRaises(ValueError):
                 contribution_projection(*args)
+
+    def test_projection_rejects_boolean_and_text_assumptions(self):
+        valid = [1_000.0, 2, 0.10, 0.05, 0.02]
+        for index in (0, 2, 3, 4):
+            for value in (True, "0.1"):
+                args = valid.copy()
+                args[index] = value
+                with self.subTest(index=index, value=value), self.assertRaises(ValueError):
+                    contribution_projection(*args)
 
     def test_monthly_holdings_drift(self):
         frame = pd.DataFrame({"A": [100, 200, 200], "B": [100, 100, 200]},
