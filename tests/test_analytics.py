@@ -4,8 +4,13 @@ import numpy as np
 import pandas as pd
 
 from aurelia_pension.analytics import (
-    contribution_projection, historical_tail, metrics, peer_ranking,
-    rebalance_portfolio, returns, walk_forward_var,
+    contribution_projection,
+    historical_tail,
+    metrics,
+    peer_ranking,
+    rebalance_portfolio,
+    returns,
+    walk_forward_var,
 )
 
 
@@ -39,6 +44,11 @@ class AnalyticsTests(unittest.TestCase):
     def test_nav_validation(self):
         for nav in [[100, 0, 90], [100, float("nan"), 90], [100, float("inf"), 90]]:
             with self.subTest(nav=nav), self.assertRaises(ValueError):
+                metrics(nav)
+
+    def test_nav_rejects_boolean_and_numeric_text(self):
+        for nav in ([100, True, 90], [100, "101", 102]):
+            with self.subTest(nav=nav), self.assertRaisesRegex(ValueError, "numeric"):
                 metrics(nav)
 
     def test_peer_ranks_never_cross_categories(self):
