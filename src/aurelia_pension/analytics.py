@@ -7,6 +7,7 @@ All monetary values are TRY; ratios are decimals; risk losses are positive.
 from __future__ import annotations
 
 import math
+import numbers
 from collections.abc import Sequence
 
 import numpy as np
@@ -16,6 +17,12 @@ PERIODS = 252
 
 
 def finite_vector(values: Sequence[float], *, minimum: int = 2) -> np.ndarray:
+    raw = np.asarray(values, dtype=object)
+    if raw.ndim != 1 or any(
+        isinstance(value, (bool, np.bool_)) or not isinstance(value, numbers.Real)
+        for value in raw
+    ):
+        raise ValueError("Observations must be numeric and must not be booleans")
     array = np.asarray(values, dtype=float)
     if array.ndim != 1 or len(array) < minimum or not np.isfinite(array).all():
         raise ValueError(f"Expected at least {minimum} finite observations")
@@ -47,7 +54,7 @@ def historical_tail(daily_returns: Sequence[float], confidence: float = 0.95) ->
         raise ValueError("Invalid confidence or return domain")
     losses = np.sort(-values)[::-1]
     mass = (1 - confidence) * len(losses)
-    whole = int(math.floor(mass + 1e-12))
+    whole = math.floor(mass + 1e-12)
     remainder = max(0.0, mass - whole)
     weighted = losses[:whole].sum()
     if remainder > 1e-12:
