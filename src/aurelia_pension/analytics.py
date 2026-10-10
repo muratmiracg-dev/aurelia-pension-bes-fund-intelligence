@@ -142,7 +142,12 @@ def rebalance_portfolio(prices: pd.DataFrame, weights: dict[str, float],
     if (not np.isfinite(target).all() or (target < 0).any()
             or not np.isclose(target.sum(), 1.0, atol=1e-9, rtol=0)):
         raise ValueError("Non-negative weights must sum to one")
-    if not np.isfinite(cost_bps) or not 0 <= cost_bps <= 1000:
+    if (
+        isinstance(cost_bps, bool)
+        or not isinstance(cost_bps, (int, float))
+        or not math.isfinite(cost_bps)
+        or not 0 <= cost_bps <= 1000
+    ):
         raise ValueError("Cost must be between 0 and 1000 bps")
     matrix = prices[list(weights)].to_numpy(dtype=float)
     if not np.isfinite(matrix).all() or (matrix <= 0).any():

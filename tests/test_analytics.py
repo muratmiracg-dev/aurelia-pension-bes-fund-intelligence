@@ -130,6 +130,15 @@ class AnalyticsTests(unittest.TestCase):
         self.assertAlmostEqual(result.turnover.iloc[-1], 1 / 6)
         self.assertAlmostEqual(result.nav.iloc[-1], 149.75)
 
+    def test_rebalance_rejects_invalid_transaction_costs(self):
+        frame = pd.DataFrame(
+            {"A": [100, 101, 102], "B": [100, 99, 101]},
+            index=pd.to_datetime(["2025-01-30", "2025-01-31", "2025-02-03"]),
+        )
+        for invalid in (True, "5", float("nan"), float("inf"), -1, 1001):
+            with self.subTest(value=invalid), self.assertRaisesRegex(ValueError, "Cost"):
+                rebalance_portfolio(frame, {"A": 0.5, "B": 0.5}, invalid)
+
     def test_weights_not_silently_normalized(self):
         f = pd.DataFrame({"A": [1, 2, 3]}, index=pd.bdate_range("2025-01-01", periods=3))
         for weights in [{"A": .9}, {"A": -1}, {"B": 1}]:
