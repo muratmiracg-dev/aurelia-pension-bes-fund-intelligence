@@ -28,7 +28,7 @@ class CommandTests(unittest.TestCase):
             result = json.loads(output.getvalue())
             self.assertEqual(result["status"], "PASS")
             self.assertEqual(result["price_observations"], 36900)
-            self.assertEqual(result["checks_passed"], 10)
+            self.assertEqual(result["checks_passed"], 11)
             self.assertEqual(before, snapshot())
             self.assertFalse((root / "artifacts").exists())
 

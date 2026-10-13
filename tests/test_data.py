@@ -25,7 +25,7 @@ class DataTests(unittest.TestCase):
         funds, prices, benchmark, checks = load(self.directory)
         self.assertEqual(len(funds), 30)
         self.assertTrue(prices.index.equals(benchmark.index))
-        self.assertEqual(len(checks), 10)
+        self.assertEqual(len(checks), 11)
 
     def test_missing_nav_rejected(self):
         file = self.directory / "fund_prices.csv"
@@ -102,6 +102,14 @@ class DataTests(unittest.TestCase):
         table.loc[0, "source_asof"] = ""
         table.to_csv(file, index=False)
         with self.assertRaisesRegex(ValueError, "cutoff dates must be non-empty"):
+            load(self.directory)
+
+    def test_duplicate_fund_names_rejected_after_normalization(self):
+        file = self.directory / "funds.csv"
+        table = pd.read_csv(file, keep_default_na=False)
+        table.loc[1, "name"] = f"  {table.loc[0, 'name']}  "
+        table.to_csv(file, index=False)
+        with self.assertRaisesRegex(ValueError, "names must be unique"):
             load(self.directory)
 
 

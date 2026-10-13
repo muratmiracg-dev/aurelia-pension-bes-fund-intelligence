@@ -86,8 +86,11 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
     for table in [funds, benchmarks]:
         if pd.to_datetime(table.source_asof, format="%Y-%m-%d", errors="raise").isna().any():
             raise ValueError("Source cutoff dates must be non-empty")
-    if (funds["name"].str.strip().eq("") | funds.category.str.strip().eq("")).any():
+    normalized_names = funds["name"].str.strip()
+    if (normalized_names.eq("") | funds.category.str.strip().eq("")).any():
         raise ValueError("Names and categories must be non-empty")
+    if normalized_names.duplicated().any():
+        raise ValueError("Fund names must be unique after trimming whitespace")
     for table, key in [(prices, "fund_id"), (benchmarks, "category")]:
         table["date"] = pd.to_datetime(table.date, format="%Y-%m-%d", errors="raise")
         if table.date.isna().any():
@@ -114,5 +117,5 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
     checks = [{"control": x, "status": "PASS"} for x in [
         "Required schema", "Unique entity-date keys", "Positive finite NAV", "TRY unit",
         "Fund referential integrity", "Benchmark coverage", "Complete common date grid",
-        "Data classification", "Source cutoff", "Minimum observation history"]]
+        "Data classification", "Unique fund names", "Source cutoff", "Minimum observation history"]]
     return funds, wide, bench, checks

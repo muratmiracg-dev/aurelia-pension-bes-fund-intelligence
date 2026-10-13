@@ -12,7 +12,8 @@ UTF-8 comma-separated files. Ratios are decimals, not percentages. Dates use
 Optional metadata `annual_fee_assumption` describes the synthetic generator only.
 It is not separately deducted by the analytical pipeline.
 
-`fund_id` is unique in metadata and unique with date in prices. The five supported
+`fund_id` and the whitespace-normalized fund name are unique in metadata; `fund_id`
+is also unique with date in prices. The five supported
 categories are `Hisse Senedi`, `Borçlanma Araçları`, `Altın`, `Para Piyasası`, `Değişken`.
 These are project groupings, not authoritative EGM peer assignments.
 
