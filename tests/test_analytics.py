@@ -145,6 +145,13 @@ class AnalyticsTests(unittest.TestCase):
             with self.subTest(weights=weights), self.assertRaises(ValueError):
                 rebalance_portfolio(f, weights)
 
+    def test_weights_reject_booleans_and_numeric_text(self):
+        frame = pd.DataFrame({"A": [100, 101, 102], "B": [100, 99, 101]},
+                             index=pd.bdate_range("2025-01-01", periods=3))
+        for weights in ({"A": True, "B": False}, {"A": "0.5", "B": 0.5}):
+            with self.subTest(weights=weights), self.assertRaisesRegex(ValueError, "weights"):
+                rebalance_portfolio(frame, weights)
+
     def test_no_lookahead_in_var(self):
         daily = np.r_[np.linspace(-.01, .01, 30), -.5, .001, .002]
         nav = np.r_[100, 100 * np.cumprod(1 + daily)]
