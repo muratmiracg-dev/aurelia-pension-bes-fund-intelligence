@@ -1,5 +1,8 @@
 # Methodology
 
+Portfolio weights are validated as finite numeric values before simulation. Boolean and
+numeric-text values are rejected rather than silently coerced, and weights must remain
+non-negative and sum to one within the documented tolerance.
 ## Intended user and decision scope
 
 A pension analytics or investment reporting analyst comparing fund behavior and
