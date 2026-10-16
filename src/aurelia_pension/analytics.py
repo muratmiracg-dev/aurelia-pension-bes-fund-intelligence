@@ -138,7 +138,11 @@ def rebalance_portfolio(prices: pd.DataFrame, weights: dict[str, float],
         raise ValueError("At least three increasing dates required")
     if not weights or not set(weights) <= set(prices.columns):
         raise ValueError("Unknown or missing allocation IDs")
-    target = np.array(list(weights.values()), dtype=float)
+    raw_weights = list(weights.values())
+    if any(isinstance(value, (bool, np.bool_)) or not isinstance(value, numbers.Real)
+           for value in raw_weights):
+        raise ValueError("Allocation weights must be numeric and must not be booleans")
+    target = np.array(raw_weights, dtype=float)
     if (not np.isfinite(target).all() or (target < 0).any()
             or not np.isclose(target.sum(), 1.0, atol=1e-9, rtol=0)):
         raise ValueError("Non-negative weights must sum to one")
