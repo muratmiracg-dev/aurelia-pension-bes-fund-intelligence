@@ -109,10 +109,11 @@ def peer_ranking(frame: pd.DataFrame) -> pd.DataFrame:
     if (frame["fund_id"].astype(str).str.strip().eq("").any()
             or frame["category"].astype(str).str.strip().eq("").any()):
         raise ValueError("Fund IDs and categories must be non-empty")
-    try:
-        total_return = pd.to_numeric(frame["total_return"], errors="raise")
-    except (TypeError, ValueError) as error:
-        raise ValueError("Period returns must be finite numeric values") from error
+    raw_returns = frame["total_return"].to_numpy(dtype=object)
+    if any(isinstance(value, (bool, np.bool_)) or not isinstance(value, numbers.Real)
+           for value in raw_returns):
+        raise ValueError("Period returns must be finite numeric values and not booleans")
+    total_return = frame["total_return"].astype(float)
     if not np.isfinite(total_return.to_numpy(dtype=float)).all():
         raise ValueError("Period returns must be finite numeric values")
     out = frame.copy()
