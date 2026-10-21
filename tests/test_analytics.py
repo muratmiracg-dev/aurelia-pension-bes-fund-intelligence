@@ -58,7 +58,7 @@ class AnalyticsTests(unittest.TestCase):
         self.assertEqual(f.peer_rank.tolist(), [1, 2, 2, 1])
 
     def test_peer_ranking_rejects_invalid_returns(self):
-        for invalid in [float("nan"), float("inf"), "not-a-number"]:
+        for invalid in [float("nan"), float("inf"), "not-a-number", "0.1", True]:
             frame = pd.DataFrame({"fund_id": ["A", "B"],
                                   "category": ["X", "X"],
                                   "total_return": [.1, invalid]})

@@ -20,6 +20,8 @@ These are project groupings, not authoritative EGM peer assignments.
 All funds and category benchmarks require at least 757 identical NAV dates. No
 orphan fund IDs, missing dates, duplicate keys, zero/negative/infinite NAV or silent
 currency conversion is allowed. Every source cutoff must cover its observations.
+Peer-ranking period returns must be native finite numeric values; boolean and numeric-text
+values are rejected rather than silently coerced.
 
 `data_class` must be uniformly `SYNTHETIC` or `EXTERNAL`, including benchmarks.
 External records require HTTPS provenance URLs and source-as-of dates. Source URLs
