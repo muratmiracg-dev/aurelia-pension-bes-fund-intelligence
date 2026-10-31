@@ -8,6 +8,8 @@
   still reported 10 of 11 ingestion gates. They are regenerated from the current code.
 - README, Turkish summary, validation record and data contract now state 43 Python tests
   and 11 ingestion controls.
+- The *Veri & yöntem* screen now HTML-escapes the reporting date range like every other
+  data-derived string (defence in depth for `--data-dir` inputs; flagged by CodeQL).
 
 ### Added
 - `tests/test_artifacts.py`: rebuilds the report in a temporary directory and fails if the
