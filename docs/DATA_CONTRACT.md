@@ -45,7 +45,7 @@ the synthetic files; `--data-dir` never rewrites supplied CSV inputs.
 Run `python -m aurelia_pension validate --data-dir PATH --json` before building.
 Validation reads the existing three CSVs, applies the same ingestion gates as the build,
 and writes no files. Success returns JSON with `status: PASS`, counts, date coverage and
-the ten controls. A data or filesystem error returns `status: FAIL`, an error message
+the eleven controls. A data or filesystem error returns `status: FAIL`, an error message
 and process exit code 2. Source URLs are provenance declarations, not independently
 verified by these gates.
 

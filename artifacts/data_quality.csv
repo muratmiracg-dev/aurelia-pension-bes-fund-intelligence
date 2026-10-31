@@ -7,5 +7,6 @@ Fund referential integrity,PASS
 Benchmark coverage,PASS
 Complete common date grid,PASS
 Data classification,PASS
+Unique fund names,PASS
 Source cutoff,PASS
 Minimum observation history,PASS
