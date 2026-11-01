@@ -1,14 +1,14 @@
 # Validation record
 
-Local regression update: **24 September 2026**.
+Local regression update: **1 November 2026**.
 
 | Check | Observed result |
 |---|---|
-| Python environment | Python 3.12, NumPy 2.3.5, pandas 2.2.3 |
-| `python -m unittest discover -s tests -v` | **32 tests passed** |
+| Python environment | Python 3.11, 3.12 and 3.13 (CI matrix: 3.11, 3.12) |
+| `python -m unittest discover -s tests -v` | **43 tests passed** |
 | `node tests/test_engine.cjs` | **543 numerical comparisons passed**, plus boundary assertions |
 | Demo generation | **30 funds; 1,230 NAV dates; 36,900 fund-price observations** |
-| Input quality gates | **10 passed** |
+| Input quality gates | **11 passed** |
 | Generated HTML / JavaScript | Embedded JSON parses; both executable scripts pass Node syntax check |
 | SQL reconciliation | 36,900 NAV rows; 90 fund-period rows; 30 initial null returns |
 
@@ -19,7 +19,9 @@ holdings drift, rebalance transaction costs, weight validation and look-ahead ex
 
 The data suite covers byte-identical regeneration, full-grid reconciliation, missing
 observations, duplicate keys, required external provenance, mixed data classes and
-orphan fund identifiers. JavaScript metrics are reconciled against the generated Python
+orphan fund identifiers. The artifact suite rebuilds the report in a temporary directory
+and requires the committed demo inputs to be byte-identical and the text artifacts to
+match it (numbers compared at 10 significant digits for NumPy-build portability). JavaScript metrics are reconciled against the generated Python
 results for every fund and every period. This is computational validation, not evidence
 that synthetic results predict actual investment outcomes.
 

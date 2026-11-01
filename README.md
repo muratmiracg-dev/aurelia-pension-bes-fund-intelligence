@@ -25,9 +25,9 @@ advice, determine suitability or reproduce the official EGM evaluation process.
 
 | Demo universe | Analytical coverage | Engineering evidence |
 |---|---|---|
-| 30 fictional funds across 5 categories | 1Y, 3Y and full-history comparisons | 32 Python regression tests |
+| 30 fictional funds across 5 categories | 1Y, 3Y and full-history comparisons | 43 Python regression tests |
 | 36,900 NAV records over 1,230 dates | 3 model portfolios and 4 stress scenarios | 543 Python/JavaScript numerical comparisons |
-| 3 Jan 2022–18 Sep 2026 | 5 interactive application screens | 10 ingestion gates, SQL views and source hashes |
+| 3 Jan 2022–18 Sep 2026 | 5 interactive application screens | 11 ingestion gates, SQL views and source hashes |
 
 **For reviewers:** open the bundled report, follow the five-minute walkthrough below,
 then inspect the methodology and test evidence. The strongest portfolio evidence is
@@ -214,7 +214,7 @@ docs/                Methodology, source register, data dictionary and validatio
 
 ## Evidence and boundaries
 
-The local Python suite has 32 passing tests, including input-validation and CLI regressions. Browser-side calculations reconcile with
+The local Python suite has 43 passing tests, including input-validation, CLI and committed-artifact regressions. Browser-side calculations reconcile with
 Python across 543 numerical comparisons plus boundary checks. These tests verify
 specific calculations, not real-world predictive performance. Interactive visual/browser
 QA was blocked by the execution environment's local-file navigation policy; see the

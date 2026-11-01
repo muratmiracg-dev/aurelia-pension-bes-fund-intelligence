@@ -45,7 +45,7 @@ EGM'nin resmî brüt getiri değerlendirmesi yeniden uygulanmış değildir.
 Fon giderlerinin NAV'a yansıdığı varsayılır. Örnek portföy adları kişisel
 risk profilini ifade etmez.
 
-32 Python testi ve 543 sayısal Python/JavaScript karşılaştırması tamamlanmıştır.
+43 Python testi ve 543 sayısal Python/JavaScript karşılaştırması tamamlanmıştır.
 Görsel tarayıcı kontrolü bu ortamın yerel dosya açma kuralı nedeniyle
 tamamlanamamıştır. Ayrıntılar: [Doğrulama](docs/VALIDATION.md).
 
