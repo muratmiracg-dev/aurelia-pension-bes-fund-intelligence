@@ -1,5 +1,21 @@
 # Change notes
 
+## 5 November 2026 — Ingestion controls fully tested
+
+### Fixed
+- Non-numeric NAV values (`abc`, `nan`, blank) were rejected by a raw pandas parse error
+  ("Unable to parse string 'nan' at position 5", where the position was not the CSV row)
+  instead of the NAV control. They now fail the NAV control with the file, spreadsheet row
+  and offending value, for example
+  `NAV values must be finite and strictly positive numbers: fund_prices.csv row 7 has abc`.
+
+### Added
+- `tests/test_data_contract.py` (12 tests) exercises the 11 previously untested rejection
+  paths of `load()`: missing columns, header-only tables, duplicate or blank fund IDs, non-TRY
+  currency, fund/benchmark data-class mismatch, blank names, non-positive, non-finite or
+  non-numeric NAV, a missing benchmark category, histories shorter than 757 dates, and fund or
+  benchmark observations after the declared source cutoff. `data.py` coverage is now 100%.
+
 ## 1 November 2026 — Committed report brought in line with current controls
 
 ### Fixed

@@ -91,15 +91,24 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
         raise ValueError("Names and categories must be non-empty")
     if normalized_names.duplicated().any():
         raise ValueError("Fund names must be unique after trimming whitespace")
-    for table, key in [(prices, "fund_id"), (benchmarks, "category")]:
+    for table, key, source in [(prices, "fund_id", "fund_prices.csv"),
+                               (benchmarks, "category", "benchmarks.csv")]:
         table["date"] = pd.to_datetime(table.date, format="%Y-%m-%d", errors="raise")
         if table.date.isna().any():
             raise ValueError("Observation dates must be non-empty")
         if table.duplicated(["date", key]).any():
             raise ValueError("Duplicate date / entity observation")
-        table["nav"] = pd.to_numeric(table.nav, errors="raise")
-        if not np.isfinite(table.nav).all() or not table.nav.gt(0).all():
-            raise ValueError("NAV values must be finite and strictly positive")
+        raw_nav = table.nav
+        table["nav"] = pd.to_numeric(raw_nav, errors="coerce")
+        invalid = ~(np.isfinite(table.nav) & table.nav.gt(0))
+        if invalid.any():
+            # Data row number as seen in a spreadsheet (header is row 1).
+            first = int(np.flatnonzero(invalid.to_numpy())[0])
+            shown = str(raw_nav.iloc[first]).strip() or "(blank)"
+            raise ValueError(
+                "NAV values must be finite and strictly positive numbers: "
+                f"{source} row {first + 2} has {shown}"
+            )
     if set(prices.fund_id) != set(funds.fund_id):
         raise ValueError("Orphan or missing fund ID")
     if set(benchmarks.category) != set(funds.category):
