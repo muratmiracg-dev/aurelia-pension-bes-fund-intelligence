@@ -1,5 +1,17 @@
 # Change notes
 
+## 14 November 2026 — Stale-artifact guard effective in CI
+
+### Fixed
+- CI ran `python -m aurelia_pension build` in the checkout before the tests. The build
+  rewrites `artifacts/` and `data/demo/`, so `tests/test_artifacts.py` compared a fresh
+  build with itself and `tests/test_engine.cjs` read freshly built data: a stale committed
+  snapshot passed CI. Tests now run on the committed files first; the build runs afterwards
+  as a smoke test.
+
+### Changed
+- CI matrix adds Python 3.13 (already a documented local environment).
+
 ## 5 November 2026 — Ingestion controls fully tested
 
 ### Fixed
