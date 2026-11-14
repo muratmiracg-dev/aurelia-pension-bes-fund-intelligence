@@ -1,11 +1,11 @@
 # Validation record
 
-Local regression update: **1 November 2026**.
+Local regression update: **14 November 2026**.
 
 | Check | Observed result |
 |---|---|
-| Python environment | Python 3.11, 3.12 and 3.13 (CI matrix: 3.11, 3.12) |
-| `python -m unittest discover -s tests -v` | **43 tests passed** |
+| Python environment | Python 3.11, 3.12 and 3.13 (CI matrix: 3.11, 3.12, 3.13) |
+| `python -m unittest discover -s tests -v` | **55 tests passed** |
 | `node tests/test_engine.cjs` | **543 numerical comparisons passed**, plus boundary assertions |
 | Demo generation | **30 funds; 1,230 NAV dates; 36,900 fund-price observations** |
 | Input quality gates | **11 passed** |
