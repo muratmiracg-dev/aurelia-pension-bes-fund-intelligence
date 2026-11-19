@@ -15,7 +15,8 @@ SELECT name, ROUND(100 * annual_return, 2) AS annual_return_pct,
        ROUND(100 * max_drawdown, 2) AS max_drawdown_pct,
        ROUND(100 * var95, 2) AS daily_var95_pct,
        ROUND(100 * es95, 2) AS daily_es95_pct,
-       tested_days, exceptions, ROUND(100 * exception_rate, 2) AS exception_rate_pct
+       tested_days, exceptions, ROUND(100 * exception_rate, 2) AS exception_rate_pct,
+       ROUND(kupiec_p_value, 4) AS kupiec_p, ROUND(independence_p_value, 4) AS independence_p
 FROM portfolio_metrics
 ORDER BY annual_return DESC;
 

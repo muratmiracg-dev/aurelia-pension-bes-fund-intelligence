@@ -5,6 +5,7 @@ import pandas as pd
 
 from aurelia_pension.analytics import (
     contribution_projection,
+    coverage_tests,
     historical_tail,
     metrics,
     peer_ranking,
@@ -166,6 +167,51 @@ class AnalyticsTests(unittest.TestCase):
         short = walk_forward_var(nav[:61], 20)
         full = walk_forward_var(nav, 20)
         np.testing.assert_allclose(short["forecasts"], full["forecasts"][:40])
+
+    def test_kupiec_hand_calculation(self):
+        # 5 exceptions in 50 days vs 5%: LR = 2*[5 ln(0.1/0.05) + 45 ln(0.9/0.95)]
+        hits = ([True] + [False] * 9) * 5
+        expected = 2 * (5 * np.log(.1 / .05) + 45 * np.log(.9 / .95))
+        result = coverage_tests(hits, .05)
+        self.assertAlmostEqual(result["kupiec_lr"], expected, places=12)
+        # chi2(1) survival at LR = 2.0654 (scipy.stats.chi2.sf) ~= 0.15067
+        self.assertAlmostEqual(result["kupiec_p_value"], 0.150673, places=5)
+
+    def test_exact_rate_has_no_coverage_evidence(self):
+        result = coverage_tests(([True] + [False] * 19) * 10, .05)
+        self.assertAlmostEqual(result["kupiec_lr"], 0.0, places=12)
+        self.assertAlmostEqual(result["kupiec_p_value"], 1.0, places=12)
+
+    def test_clustered_exceptions_fail_independence_not_coverage(self):
+        # Right number of exceptions (5%), all on consecutive days: the rate alone
+        # looks perfect, only the independence test exposes the clustering.
+        hits = [False] * 100 + [True] * 10 + [False] * 90
+        result = coverage_tests(hits, .05)
+        self.assertGreater(result["kupiec_p_value"], .99)
+        self.assertLess(result["independence_p_value"], 1e-6)
+        self.assertLess(result["conditional_coverage_p_value"], 1e-5)
+        self.assertEqual(result["consecutive_exceptions"], 9)
+
+    def test_zero_and_all_exceptions_are_finite(self):
+        for hits in ([False] * 30, [True] * 30):
+            with self.subTest(first=hits[0]):
+                result = coverage_tests(hits, .05)
+                self.assertTrue(all(np.isfinite(v) for v in result.values()))
+                self.assertLess(result["kupiec_p_value"], .2)
+
+    def test_coverage_input_validation(self):
+        for hits, rate in (([True], .05), ([1, 0, 1], .05), ([True, False], 0),
+                           ([True, False], True)):
+            with self.subTest(hits=hits, rate=rate), self.assertRaises(ValueError):
+                coverage_tests(hits, rate)
+
+    def test_walk_forward_reports_coverage_tests(self):
+        daily = np.sin(np.arange(100)) * .01
+        nav = np.r_[100, 100 * np.cumprod(1 + daily)]
+        result = walk_forward_var(nav, 20)
+        expected = coverage_tests(result["violations"], .05)
+        for key, value in expected.items():
+            self.assertEqual(result[key], value)
 
 
 if __name__ == "__main__":

@@ -71,8 +71,21 @@ They are instantaneous fixed-weight shocks, not scenario paths or probability fo
 For each tested day, use only the previous 252 daily returns to calculate VaR.
 Count an exception when the realized daily loss strictly exceeds the forecast.
 Do not include the tested day in estimation. Report the number of exceptions and
-tested observations with a 5% reference rate. There is no pass/fail regulatory claim,
-independence test or official traffic-light classification.
+tested observations with a 5% reference rate, plus two likelihood-ratio tests on the
+exception sequence:
+
+- **Kupiec (1995) unconditional coverage:** `LR_uc = 2[ln L(x/n) − ln L(0.05)]` for
+  `x` exceptions in `n` days, compared with χ²(1). A small p-value means the exception
+  rate differs from 5%.
+- **Christoffersen (1998) independence:** a first-order Markov test of whether an
+  exception makes the next day's exception more likely (`π01` vs `π11`), compared with
+  χ²(1). A small p-value means exceptions cluster, which a correct average rate can hide.
+- **Conditional coverage:** `LR_cc = LR_uc + LR_ind`, compared with χ²(2).
+
+p-values use the closed-form χ² survival functions (`erfc(√(x/2))` for one degree of
+freedom, `exp(−x/2)` for two), with `0·ln 0 = 0` for samples with no or only
+exceptions. These are sample diagnostics; there is no pass/fail regulatory claim or
+official traffic-light classification.
 
 ## Contribution scenarios
 

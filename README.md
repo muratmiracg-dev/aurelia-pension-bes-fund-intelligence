@@ -195,6 +195,7 @@ sqlite3 -header -column artifacts/aurelia_pension.sqlite < sql/example_queries.s
 | Excess return | Fund cumulative return minus its category benchmark cumulative return |
 | Peer rank | Descending return rank within a category; ties retain the same minimum rank |
 | VaR exception rate | Share of subsequent days exceeding the preceding-window VaR; diagnostic, not a pass/fail label |
+| VaR coverage tests | Kupiec unconditional-coverage and Christoffersen independence (clustering) p-values on the exception sequence; diagnostics, not a traffic-light verdict |
 
 CSV and database ratios use decimal units: `0.12` means 12%. Full definitions,
 rebalance timing and cost assumptions are in [Methodology](docs/METHODOLOGY.md).

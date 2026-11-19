@@ -1,5 +1,15 @@
 # Change notes
 
+## 20 November 2026 — Statistical VaR backtest
+
+### Added
+- The walk-forward VaR diagnostic reported only an exception count and rate, and the
+  dashboard itself said an independence test was still needed. It now reports Kupiec
+  unconditional-coverage, Christoffersen independence and conditional-coverage
+  likelihood-ratio statistics with p-values (CSV, SQLite, manifest and dashboard).
+  A sequence with exactly 5% exceptions that all fall on consecutive days now shows a
+  clustering failure instead of looking perfect.
+
 ## 14 November 2026 — Stale-artifact guard effective in CI
 
 ### Fixed
