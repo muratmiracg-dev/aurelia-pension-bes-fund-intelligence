@@ -79,6 +79,9 @@ Fon kimlikleri metin olarak korunur; `0001` gibi kodların başındaki sıfırla
 [SQL örnekleri](sql/example_queries.sql); kategori içindeki lider fonları, portföy
 risklerini ve fon bazında gözlem sayısını sorgular. Veritabanındaki oranlar ondalıktır:
 `0.12`, yüzde 12 anlamına gelir. Maksimum düşüş negatif, VaR/ES kayıp değerleri pozitiftir.
+Portföy VaR geriye dönük testinde aşım oranının yanında Kupiec kapsama ve
+Christoffersen bağımsızlık (kümelenme) testlerinin p değerleri de raporlanır; bunlar
+tanı istatistiğidir, resmî trafik ışığı sınıflandırması değildir.
 
 ## İnceleme sırası
 

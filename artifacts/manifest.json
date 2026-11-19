@@ -20,7 +20,14 @@
       "tested_days": 977,
       "exceptions": 54,
       "exception_rate": 0.05527123848515865,
-      "reference_rate": 0.05
+      "reference_rate": 0.05,
+      "kupiec_lr": 0.5534328128585457,
+      "kupiec_p_value": 0.45691843122715137,
+      "independence_lr": 0.40910059954700273,
+      "independence_p_value": 0.5224263588098446,
+      "consecutive_exceptions": 2,
+      "conditional_coverage_lr": 0.9625334124055485,
+      "conditional_coverage_p_value": 0.6180000712687974
     },
     {
       "name": "Dengeli",
@@ -34,7 +41,14 @@
       "tested_days": 977,
       "exceptions": 46,
       "exception_rate": 0.04708290685772774,
-      "reference_rate": 0.05
+      "reference_rate": 0.05,
+      "kupiec_lr": 0.17834799188437955,
+      "kupiec_p_value": 0.6727968108373115,
+      "independence_lr": 0.3173835048964406,
+      "independence_p_value": 0.5731843217829183,
+      "consecutive_exceptions": 3,
+      "conditional_coverage_lr": 0.4957314967808202,
+      "conditional_coverage_p_value": 0.7804647148892002
     },
     {
       "name": "Büyüme",
@@ -48,7 +62,14 @@
       "tested_days": 977,
       "exceptions": 47,
       "exception_rate": 0.048106448311156604,
-      "reference_rate": 0.05
+      "reference_rate": 0.05,
+      "kupiec_lr": 0.07464797804811951,
+      "kupiec_p_value": 0.7846857813040563,
+      "independence_lr": 1.2223573850968705,
+      "independence_p_value": 0.26889850992700226,
+      "consecutive_exceptions": 4,
+      "conditional_coverage_lr": 1.29700536314499,
+      "conditional_coverage_p_value": 0.5228280310182699
     }
   ],
   "inputs": {

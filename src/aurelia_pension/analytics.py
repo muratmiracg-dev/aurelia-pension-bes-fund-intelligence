@@ -202,6 +202,64 @@ def contribution_projection(monthly: float, years: int, annual_return: float,
     return rows
 
 
+def _log_likelihood(failures: int, trials: int, probability: float) -> float:
+    """Bernoulli log-likelihood with the 0 * log(0) = 0 convention."""
+    out = 0.0
+    if failures:
+        out += failures * math.log(probability)
+    if trials - failures:
+        out += (trials - failures) * math.log1p(-probability)
+    return out
+
+
+def coverage_tests(violations: Sequence[bool], reference_rate: float = 0.05) -> dict:
+    """Kupiec (1995) unconditional coverage and Christoffersen (1998) tests.
+
+    ``unconditional``: does the exception rate equal the reference rate? (LR, chi2 df=1)
+    ``independence``: does an exception today change tomorrow's exception
+    probability, i.e. do exceptions cluster? (first-order Markov LR, chi2 df=1)
+    ``conditional``: both together (LR_uc + LR_ind, chi2 df=2).
+    p-values are diagnostics on a sample, not a regulatory traffic-light verdict.
+    """
+    raw = list(violations)
+    if any(not isinstance(v, (bool, np.bool_)) for v in raw):
+        raise ValueError("Violations must be booleans")
+    if len(raw) < 2:
+        raise ValueError("At least two tested observations are required")
+    if (isinstance(reference_rate, bool) or not isinstance(reference_rate, (int, float))
+            or not 0 < reference_rate < 1):
+        raise ValueError("Reference rate must be between 0 and 1")
+    hits = [bool(v) for v in raw]
+    n, x = len(hits), sum(hits)
+    lr_uc = 2 * (_log_likelihood(x, n, x / n) - _log_likelihood(x, n, reference_rate))
+    pairs = list(zip(hits[:-1], hits[1:]))
+    n01 = sum(not a and b for a, b in pairs)
+    n00 = sum(not a and not b for a, b in pairs)
+    n11 = sum(a and b for a, b in pairs)
+    n10 = sum(a and not b for a, b in pairs)
+    from_calm, from_hit = n00 + n01, n10 + n11
+    pooled = (n01 + n11) / len(pairs)
+    restricted = _log_likelihood(n01 + n11, len(pairs), pooled)
+    unrestricted = 0.0
+    if from_calm:
+        unrestricted += _log_likelihood(n01, from_calm, n01 / from_calm)
+    if from_hit:
+        unrestricted += _log_likelihood(n11, from_hit, n11 / from_hit)
+    lr_ind = max(0.0, 2 * (unrestricted - restricted))
+    lr_uc = max(0.0, lr_uc)
+    lr_cc = lr_uc + lr_ind
+    return {
+        "kupiec_lr": lr_uc,
+        # chi2 survival: df=1 -> erfc(sqrt(x/2)); df=2 -> exp(-x/2)
+        "kupiec_p_value": math.erfc(math.sqrt(lr_uc / 2)),
+        "independence_lr": lr_ind,
+        "independence_p_value": math.erfc(math.sqrt(lr_ind / 2)),
+        "consecutive_exceptions": n11,
+        "conditional_coverage_lr": lr_cc,
+        "conditional_coverage_p_value": math.exp(-lr_cc / 2),
+    }
+
+
 def walk_forward_var(nav: Sequence[float], window: int = 252) -> dict:
     """Each forecast uses only returns strictly before the tested observation."""
     daily = returns(nav)
@@ -216,4 +274,5 @@ def walk_forward_var(nav: Sequence[float], window: int = 252) -> dict:
     count = int(violations.sum())
     return {"window": window, "tested_days": n, "exceptions": count,
             "exception_rate": count / n, "reference_rate": 0.05,
+            **coverage_tests(violations.tolist(), 0.05),
             "forecasts": forecasts, "violations": violations.tolist()}
