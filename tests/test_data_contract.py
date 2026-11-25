@@ -101,6 +101,22 @@ class DataContractRejectionTests(unittest.TestCase):
         self.write("benchmarks.csv", benchmarks[benchmarks["category"] != dropped])
         self.assertRejected("one benchmark series per category")
 
+    def test_decimal_shifted_fund_nav(self):
+        prices = self.read("fund_prices.csv")
+        row = prices.index[(prices["fund_id"] == "DEMO-AL03")][500]
+        prices.loc[row, "nav"] = str(float(prices.loc[row, "nav"]) * 10)
+        self.write("fund_prices.csv", prices)
+        date = prices.loc[row, "date"]
+        self.assertRejected(rf"fund_prices.csv: DEMO-AL03 on {date} is (9\.\d+|10(\.\d+)?)x")
+
+    def test_unadjusted_split_in_benchmark(self):
+        benchmarks = self.read("benchmarks.csv")
+        series = benchmarks.index[benchmarks["category"] == "Hisse Senedi"]
+        tail = series[800:]
+        benchmarks.loc[tail, "nav"] = (benchmarks.loc[tail, "nav"].astype(float) / 2).astype(str)
+        self.write("benchmarks.csv", benchmarks)
+        self.assertRejected("benchmarks.csv: Hisse Senedi on .* unadjusted split")
+
     def test_history_shorter_than_three_years(self):
         prices, benchmarks = self.read("fund_prices.csv"), self.read("benchmarks.csv")
         keep = sorted(prices["date"].unique())[-700:]
