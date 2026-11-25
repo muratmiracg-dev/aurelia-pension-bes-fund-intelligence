@@ -20,6 +20,9 @@ These are project groupings, not authoritative EGM peer assignments.
 All funds and category benchmarks require at least 757 identical NAV dates. No
 orphan fund IDs, missing dates, duplicate keys, zero/negative/infinite NAV or silent
 currency conversion is allowed. Every source cutoff must cover its observations.
+A one-day NAV ratio of 2/3x or below, or 1.5x or above, in any fund or benchmark series is
+rejected with the file, entity and date: such a move signals a decimal shift, unit change
+or unadjusted split rather than a market return.
 Peer-ranking period returns must be native finite numeric values; boolean and numeric-text
 values are rejected rather than silently coerced.
 
@@ -45,7 +48,7 @@ the synthetic files; `--data-dir` never rewrites supplied CSV inputs.
 Run `python -m aurelia_pension validate --data-dir PATH --json` before building.
 Validation reads the existing three CSVs, applies the same ingestion gates as the build,
 and writes no files. Success returns JSON with `status: PASS`, counts, date coverage and
-the eleven controls. A data or filesystem error returns `status: FAIL`, an error message
+the twelve controls. A data or filesystem error returns `status: FAIL`, an error message
 and process exit code 2. Source URLs are provenance declarations, not independently
 verified by these gates.
 

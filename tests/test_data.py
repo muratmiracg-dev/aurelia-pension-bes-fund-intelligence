@@ -25,7 +25,7 @@ class DataTests(unittest.TestCase):
         funds, prices, benchmark, checks = load(self.directory)
         self.assertEqual(len(funds), 30)
         self.assertTrue(prices.index.equals(benchmark.index))
-        self.assertEqual(len(checks), 11)
+        self.assertEqual(len(checks), 12)
 
     def test_missing_nav_rejected(self):
         file = self.directory / "fund_prices.csv"

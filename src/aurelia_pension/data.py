@@ -8,6 +8,11 @@ import pandas as pd
 SEED = 20260920
 CATEGORIES = ["Hisse Senedi", "Borçlanma Araçları", "Altın", "Para Piyasası", "Değişken"]
 CODES = ["HS", "BA", "AL", "PP", "DG"]
+# One-day NAV ratio bounds: a fall of a third or a rise of half. That is far beyond a
+# TRY pension fund or category index day (equity circuit breakers stop near 10%), but a
+# decimal shift (x10, x0.01), a unit change or an unadjusted 2:1 split always crosses it,
+# even on a day the market itself moves a few percent.
+NAV_JUMP_BOUNDS = (2 / 3, 1.5)
 
 
 def generate(directory: Path) -> None:
@@ -117,6 +122,17 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
     bench = benchmarks.pivot(index="date", columns="category", values="nav").sort_index()
     if wide.isna().any().any() or bench.isna().any().any() or not wide.index.equals(bench.index):
         raise ValueError("All series require an identical complete date grid; no silent fill")
+    low, high = NAV_JUMP_BOUNDS
+    for table, source in [(wide, "fund_prices.csv"), (bench, "benchmarks.csv")]:
+        ratio = table / table.shift(1)
+        jumps = (ratio <= low) | (ratio >= high)
+        if jumps.any().any():
+            date, entity = jumps.stack().loc[lambda flags: flags].index[0]
+            raise ValueError(
+                f"Implausible one-day NAV move in {source}: {entity} on "
+                f"{date:%Y-%m-%d} is {ratio.at[date, entity]:.4g}x the previous NAV; "
+                "check for a decimal shift, unit change or unadjusted split"
+            )
     if len(wide) < 757:
         raise ValueError("At least 757 shared NAV dates required for the three-year view")
     if wide.index[-1] > pd.to_datetime(funds.source_asof).min():
@@ -126,5 +142,6 @@ def load(directory: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, lis
     checks = [{"control": x, "status": "PASS"} for x in [
         "Required schema", "Unique entity-date keys", "Positive finite NAV", "TRY unit",
         "Fund referential integrity", "Benchmark coverage", "Complete common date grid",
-        "Data classification", "Unique fund names", "Source cutoff", "Minimum observation history"]]
+        "Data classification", "Unique fund names", "Source cutoff", "Minimum observation history",
+        "Plausible one-day NAV moves"]]
     return funds, wide, bench, checks
